@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 // A relatively big thread local area size, to dominate memory usage and
 // improve check accuracy.
 const long TL_SIZE_BYTES = 2 * 1024 * 1024;
