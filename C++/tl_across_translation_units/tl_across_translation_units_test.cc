@@ -66,7 +66,7 @@ TEST(tl_across_translation_units, statically_linked_executable) {
 
 static unsigned long self_static_memory_usage_kib() {
 #if defined(OS_LINUX)
-    return self_statm().size;
+    return self_statm().data;
 #else
     throw std::runtime_error("self_static_memory_usage_kib() is not implemented for this platform");
 #endif
