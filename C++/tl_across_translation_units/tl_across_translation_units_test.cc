@@ -80,26 +80,14 @@ static statm vm_self_statm() {
     if (!statm_file) {
         throw std::runtime_error(std::format("Failed to open {}", statm_path));
     }
-
     statm buf;
     statm_file >> buf.size >> buf.resident >> buf.share >> buf.text >> buf.lib >> buf.data >> buf.dt;
-    
-    // A dummy ' ' for checking bad I/O before isspace() on the second iteration and onwards,
-    // and calling fail() only when eof() returns false.
-    auto trailing_whitespace = std::string(1, ' ');
-    // The first iteration checks the previous data I/O.
-    do {
-        if (statm_file.bad()) {
-            throw std::runtime_error(std::format("I/O error while reading from file {}", statm_path));
-        }
-        if (statm_file.fail()) {
-            throw std::runtime_error(std::format("Non-integer data encountered from file {}", statm_path));
-        }
-        if (!std::isspace(trailing_whitespace[0])) {
-            throw std::runtime_error("Unsupported proc_pid_statm file format");
-        }
-        statm_file.read(&trailing_whitespace[0], 1);
-    } while (!statm_file.eof());
+    if (statm_file.bad()) {
+        throw std::runtime_error(std::format("I/O error while reading from file {}", statm_path));
+    }
+    if (statm_file.fail()) {
+        throw std::runtime_error(std::format("Non-integer data encountered from file {}", statm_path));
+    }
     return buf;
 }
 #endif
