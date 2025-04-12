@@ -12,7 +12,8 @@
 #include "gtest/gtest.h"
 #include "tl_defs.hh"
 
-static unsigned long self_static_memory_usage_kib();
+// Returns the size of data + stack virtual memory for the current process in KiBs. 
+static unsigned long vm_self_data_and_stack_size();
 
 #if defined(OS_LINUX)
 struct statm {
@@ -43,7 +44,7 @@ TEST(tl_across_translation_units, statically_linked_executable) {
     // program.
     // We record the memory usage before the threads creation and 
     // later subtract to improve the accuracy of the test.
-    auto static_memory_usage_kib_before = self_static_memory_usage_kib();
+    auto static_memory_usage_kib_before = vm_self_data_and_stack_size();
 
     for (int i = 0; i < THREAD_COUNT; ++i) {
         threads.emplace_back([&threads_created_latch, &unblock_threads_latch] () {
@@ -54,7 +55,7 @@ TEST(tl_across_translation_units, statically_linked_executable) {
     
     threads_created_latch.wait();
     
-    long static_memory_usage_kib_after = self_static_memory_usage_kib();
+    long static_memory_usage_kib_after = vm_self_data_and_stack_size();
     ASSERT_GE(static_memory_usage_kib_after - static_memory_usage_kib_before, THREAD_COUNT * TL_SIZE_BYTES / 1024) 
         << "Memory usage including thread local area is less than expected";
 
@@ -64,11 +65,11 @@ TEST(tl_across_translation_units, statically_linked_executable) {
     }
 }
 
-static unsigned long self_static_memory_usage_kib() {
+static unsigned long vm_self_data_and_stack_size() {
 #if defined(OS_LINUX)
     return self_statm().data;
 #else
-    throw std::runtime_error("self_static_memory_usage_kib() is not implemented for this platform");
+    throw std::runtime_error("vm_self_data_and_stack_size() is not implemented for this platform");
 #endif
 }
 
