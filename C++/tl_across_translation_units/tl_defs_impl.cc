@@ -1,5 +1,5 @@
 #include "tl_defs.hh"
-#include <cstddef>
+#include <cstdint>
 
 thread_local uint8_t big_tl[TL_SIZE_BYTES] = {1};
 
