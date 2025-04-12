@@ -26,7 +26,7 @@ struct statm {
     unsigned long dt;
 };
 
-static statm self_statm();
+static statm vm_self_statm();
 #endif
 
 TEST(tl_across_translation_units, statically_linked_executable) {
@@ -67,14 +67,14 @@ TEST(tl_across_translation_units, statically_linked_executable) {
 
 static unsigned long vm_self_data_and_stack_size() {
 #if defined(OS_LINUX)
-    return self_statm().data;
+    return vm_self_statm().data;
 #else
     throw std::runtime_error("vm_self_data_and_stack_size() is not implemented for this platform");
 #endif
 }
 
 #if defined(OS_LINUX)
-static statm self_statm() {
+static statm vm_self_statm() {
     auto statm_path = "/proc/self/statm";
     std::ifstream statm_file(statm_path);
     if (!statm_file) {
