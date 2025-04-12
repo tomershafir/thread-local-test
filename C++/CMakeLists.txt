@@ -1,3 +1,5 @@
+include (tl_add_test)
+
 set (CMAKE_CXX_STANDARD 23)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -33,33 +35,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable (googletest)
 
-function (_build_test name)
-  cmake_parse_arguments (parsed_args
-  ""
-  ""
-  "SOURCES;LIBRARIES"
-  ${ARGN})
-  
-  if (NOT parsed_args_SOURCES)
-    message (FATAL_ERROR "No source files provided for test ${name}.")
-  endif ()
+set (DEFAULT_COMPILER_FLAGS -Wall -Wextra)
 
-  set (target ${name}_test)
-
-  add_executable (${target} ${parsed_args_SOURCES})
-  
-  target_compile_options (${target} PRIVATE -Wall -Wextra)
-  
-  if (parsed_args_LIBRARIES)
-    target_link_libraries (${target} ${parsed_args_LIBRARIES})
-  endif()
-endfunction ()
-
-_build_test (tl_across_translation_units
+tl_add_test (tl_across_translation_units
   SOURCES 
     tl_across_translation_units/tl_across_translation_units_test.cc
     tl_across_translation_units/tl_defs_impl.cc
     tl_across_translation_units/tl_defs.hh
+  COMPILER_FLAGS
+    ${DEFAULT_COMPILER_FLAGS}
   LIBRARIES
     gtest_main
 )
