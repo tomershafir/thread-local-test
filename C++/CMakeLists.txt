@@ -37,7 +37,9 @@ FetchContent_MakeAvailable (googletest)
 
 set (DEFAULT_COMPILER_FLAGS -Wall -Wextra)
 
-tl_add_test (cxx_tl_across_translation_units
+set (PREFIX "cxx_")
+
+tl_add_test ("${PREFIX}tl_across_translation_units"
   SOURCES 
     tl_across_translation_units/tl_across_translation_units_test.cc
     tl_across_translation_units/tl_defs_impl.cc

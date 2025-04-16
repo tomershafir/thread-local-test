@@ -29,7 +29,9 @@ set (CMAKE_BUILD_TYPE
 
 set (DEFAULT_COMPILER_FLAGS -Wall -Wextra)
 
-tl_add_test (c_tl_across_translation_units
+set (PREFIX "c_")
+
+tl_add_test ("${PREFIX}tl_across_translation_units"
   SOURCES 
     tl_across_translation_units/tl_across_translation_units_test.c
     tl_across_translation_units/tl_defs_impl.c
