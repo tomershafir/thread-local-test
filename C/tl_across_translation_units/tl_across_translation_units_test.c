@@ -10,17 +10,17 @@
 typedef struct latch {
     pthread_mutex_t mutex;
     pthread_cond_t cond;
-    int count;
+    unsigned count;
 } latch;
 
 // If count is negative or greater than INT_MAX, the behaviour is undefined.
-void latch_init(latch *l, int count);
+void latch_init(latch *l, unsigned count);
 
 void latch_destroy(latch *l);
 
 // If the count down size is negative or greater than the internal counter, the behaviour is undefined.
 void latch_count_down(latch *l);
-void latch_count_down_n(latch *l, int n);
+void latch_count_down_n(latch *l, unsigned n);
 
 void latch_wait(latch *l);
 
@@ -92,7 +92,7 @@ static void *thread_signal_and_wait(void *unused) {
     return NULL; // unused
 }
 
-void latch_init(latch *l, int count) {
+void latch_init(latch *l, unsigned count) {
     pthread_mutex_init(&l->mutex, NULL);
     pthread_cond_init(&l->cond, NULL);
     l->count = count;
@@ -107,7 +107,7 @@ void latch_count_down(latch *l) {
     latch_count_down_n(l, 1);
 }
 
-void latch_count_down_n(latch *l, int n) {
+void latch_count_down_n(latch *l, unsigned n) {
     pthread_mutex_lock(&l->mutex);
     l->count -= n;
     if (!l->count) {
