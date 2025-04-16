@@ -1,7 +1,7 @@
 include (tl_add_test)
 
-set (CMAKE_CXX_STANDARD 23)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_C_STANDARD 23)
+set (CMAKE_C_STANDARD_REQUIRED ON)
 
 if ((CMAKE_SYSTEM_NAME MATCHES "Linux"))
   set (OS_LINUX 1)
@@ -27,25 +27,16 @@ set (CMAKE_BUILD_TYPE
   "Choose the type of build." 
   FORCE)
 
-include (FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE # requires CMake 3.24
-)
-FetchContent_MakeAvailable (googletest)
-
 set (DEFAULT_COMPILER_FLAGS -Wall -Wextra)
 
-set (PREFIX "cxx_")
+set (PREFIX "c_")
 
 tl_add_test ("${PREFIX}tl_across_translation_units"
   SOURCES 
-    tl_across_translation_units/tl_across_translation_units_test.cc
-    tl_across_translation_units/tl_defs_impl.cc
-    tl_across_translation_units/tl_defs.hh
+    tl_across_translation_units/tl_across_translation_units_test.c
+    tl_across_translation_units/tl_defs_impl.c
+    tl_across_translation_units/tl_defs.h
   COMPILER_FLAGS
     ${DEFAULT_COMPILER_FLAGS}
-  LIBRARIES
-    gtest_main
+    -pthread
 )

@@ -5,3 +5,4 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 project (thread-local-test)
 
 add_subdirectory (C++)
+add_subdirectory (C)
