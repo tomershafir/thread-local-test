@@ -24,7 +24,7 @@ void latch_count_down_n(latch *l, unsigned n);
 
 void latch_wait(latch *l);
 
-static void *thread_signal_and_wait(void *_unused);
+static void *thread_signal_and_wait(void *unused);
 
 // Returns the size of data + stack virtual memory for the ciurrent process in KiBs.
 static long vm_self_data_and_stack_size(void);
