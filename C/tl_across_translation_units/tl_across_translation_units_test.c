@@ -118,7 +118,7 @@ void latch_count_down_n(latch *l, unsigned n) {
 
 void latch_wait(latch *l) {
     pthread_mutex_lock(&l->mutex);
-    while (l->count > 0) {
+    while (l->count) {
         pthread_cond_wait(&l->cond, &l->mutex);
     }
     pthread_mutex_unlock(&l->mutex);
